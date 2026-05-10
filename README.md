@@ -2,7 +2,7 @@
   <img src="./asset/introduction.png" alt="open-canvas" width="100%" />
 </p>
 
-# OPEN-CANVAS
+# open-canvas
 
 > The whiteboard framework built for agents. Describe the board in natural language — your coding agent writes the React. open-canvas handles the infinite canvas, sectioning, present mode, hot reload, Inspector and PDF export so the agent can focus on content.
 
@@ -138,3 +138,7 @@ See [`AGENTS.md`](./AGENTS.md) for the full contributor contract and [`DESIGN.md
 ## LICENSE
 
 MIT
+
+## Star 趋势
+
+[![Star History Chart](https://api.star-history.com/chart?repos=hanyuancheung/open-canvas&type=date)](https://www.star-history.com/?repos=hanyuancheung%2Fopen-canvas&type=date)
