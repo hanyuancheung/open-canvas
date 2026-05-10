@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./asset/introduction.png" alt="open-canvas" width="100%" />
+</p>
+
 # OPEN-CANVAS
 
 > 为智能体打造的白板框架。用自然语言描述白板 —— 你的 coding agent 来写 React。open-canvas 负责无限画布、分区排版、演示模式、热更新、Inspector 与 PDF 导出，让 agent 专注于内容本身。

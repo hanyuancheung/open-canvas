@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./asset/introduction.png" alt="open-canvas" width="100%" />
+</p>
+
 # OPEN-CANVAS
 
 > The whiteboard framework built for agents. Describe the board in natural language — your coding agent writes the React. open-canvas handles the infinite canvas, sectioning, present mode, hot reload, Inspector and PDF export so the agent can focus on content.
