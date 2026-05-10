@@ -1,0 +1,37 @@
+{
+  "name": "@open-canvas/cli",
+  "version": "0.1.0",
+  "description": "Scaffolder for open-canvas — `npx @open-canvas/cli init my-board`.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "open-canvas-init": "./bin.js",
+    "create-open-canvas": "./bin.js"
+  },
+  "main": "./dist/index.js",
+  "files": [
+    "bin.js",
+    "dist",
+    "template",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "cac": "^6.7.14",
+    "kleur": "^4.1.5",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.6",
+    "@types/prompts": "^2.4.9",
+    "tsdown": "^0.6.0",
+    "typescript": "^5.6.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

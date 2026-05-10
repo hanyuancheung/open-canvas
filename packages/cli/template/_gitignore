@@ -1,0 +1,5 @@
+node_modules
+dist
+.open-canvas-export
+.DS_Store
+*.log

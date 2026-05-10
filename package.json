@@ -1,0 +1,28 @@
+{
+  "name": "open-canvas",
+  "private": true,
+  "version": "0.0.0",
+  "description": "A whiteboard framework built for agents — infinite canvas, sectioned PPT-style presenting, PDF export, in-browser inspector and skills for coding agents.",
+  "license": "MIT",
+  "packageManager": "pnpm@9.12.0",
+  "scripts": {
+    "dev": "turbo run dev --filter=demo...",
+    "build": "turbo run build",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "lint": "biome lint .",
+    "typecheck": "turbo run typecheck"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "turbo": "^2.3.0",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=18.18"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ]
+}
