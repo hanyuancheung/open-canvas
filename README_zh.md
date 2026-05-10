@@ -3,7 +3,7 @@
 > 为智能体打造的白板框架。
 > 把一句 *"做一块讲 X 的白板"*，变成可无限漫游、可分区演示、可一键导出 PDF 的可视化作品 —— 由 agent 用纯 React 写就。
 
-**简体中文** · [English](./README.md)
+**简体中文** · [English](./README.md) · [![CI](https://github.com/hanyuancheung/open-canvas/actions/workflows/ci.yml/badge.svg)](https://github.com/hanyuancheung/open-canvas/actions/workflows/ci.yml) · [npm core](https://www.npmjs.com/package/@open-canvas/core) · [npm cli](https://www.npmjs.com/package/@open-canvas/cli)
 
 ## 30 秒上手
 
@@ -15,6 +15,9 @@ pnpm dev
 ```
 
 打开 http://localhost:5173，会落到 `boards/getting-started`。按 `P` 进入演示模式，按 `⌘I`（或 `Ctrl+I`）打开 Inspector。
+
+> **注意** — `@open-canvas/*` 系列包尚未发布到 npm registry。如果 `npx` 报 `@open-canvas/cli@* could not be found`，
+> 请参考 [`PUBLISHING.md`](./PUBLISHING.md) 中的三条免 registry 本地落地路径（直接跑 / `pnpm link` / 本地 tarball）。
 
 ## 核心特性
 

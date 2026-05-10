@@ -1,0 +1,7 @@
+# pnpm 11+ blocks build-time scripts unless explicitly allowed.
+# We pre-allow esbuild here so the very first `pnpm install` succeeds without
+# manual intervention. This file is only meaningful to pnpm; npm/yarn ignore it.
+onlyBuiltDependencies:
+  - esbuild
+allowBuilds:
+  esbuild: true

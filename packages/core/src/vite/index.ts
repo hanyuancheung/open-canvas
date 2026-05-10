@@ -54,6 +54,13 @@ export function createViteConfig(opts: {
     },
     optimizeDeps: {
       include: ['react', 'react-dom', 'react-dom/client'],
+      // The runtime imports virtual modules (`virtual:open-canvas/boards` etc.) that
+      // only Vite's plugin pipeline can resolve. If esbuild's dep prebundling tries
+      // to crawl runtime/index.js it errors out. Skip it entirely.
+      exclude: ['@open-canvas/core', '@open-canvas/core/runtime', '@open-canvas/core/vite'],
+    },
+    ssr: {
+      noExternal: ['@open-canvas/core'],
     },
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@open-canvas/core",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Runtime, Vite plugin and CLI for open-canvas — an agent-native whiteboard framework.",
   "license": "MIT",
   "type": "module",
@@ -31,9 +31,10 @@
     "README.md"
   ],
   "scripts": {
-    "dev": "tsdown --watch",
-    "build": "tsdown",
-    "typecheck": "tsc --noEmit"
+    "dev": "tsup --watch",
+    "build": "rimraf dist && tsup",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "rimraf dist && tsup"
   },
   "peerDependencies": {
     "react": "^18.2.0 || ^19.0.0",
@@ -56,10 +57,11 @@
     "@types/react-dom": "^18.3.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "tsdown": "^0.6.0",
+    "tsup": "^8.3.5",
     "typescript": "^5.6.3"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

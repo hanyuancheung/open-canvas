@@ -104,7 +104,8 @@ async function copyDir(src: string, dst: string) {
     // package.json.tmpl → package.json，由 renderPackageJson 接管
     let name = e.name
     if (name === 'package.json.tmpl') continue
-    if (name === '_gitignore') name = '.gitignore'
+    if (name === 'gitignore' || name === '_gitignore') name = '.gitignore'
+    if (name === 'npmrc' || name === '_npmrc') name = '.npmrc'
     const d = path.join(dst, name)
     if (e.isDirectory()) {
       await fs.mkdir(d, { recursive: true })

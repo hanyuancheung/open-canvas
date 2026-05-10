@@ -3,7 +3,7 @@
 > A whiteboard framework built for agents.
 > Turn *"draft a whiteboard about X"* into an infinitely-pannable, sectioned, presentable, PDF-exportable artifact — written by your coding agent in plain React.
 
-[简体中文](./README_zh.md) · **English**
+[简体中文](./README_zh.md) · **English** · [![CI](https://github.com/hanyuancheung/open-canvas/actions/workflows/ci.yml/badge.svg)](https://github.com/hanyuancheung/open-canvas/actions/workflows/ci.yml) · [npm core](https://www.npmjs.com/package/@open-canvas/core) · [npm cli](https://www.npmjs.com/package/@open-canvas/cli)
 
 ## 30-second tour
 
@@ -15,6 +15,10 @@ pnpm dev
 ```
 
 Open http://localhost:5173, you'll land on `boards/getting-started`. Press `P` to present, `⌘I` (or `Ctrl+I`) to enter Inspector.
+
+> **Note** — the `@open-canvas/*` packages are not published to the npm registry yet. If `npx` reports
+> `@open-canvas/cli@* could not be found`, follow one of the three zero-registry paths in
+> [`PUBLISHING.md`](./PUBLISHING.md) (direct run / `pnpm link` / local tarball).
 
 ## Core features
 

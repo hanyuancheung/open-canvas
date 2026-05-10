@@ -11,18 +11,20 @@
     "check": "biome check .",
     "check:fix": "biome check --write .",
     "lint": "biome lint .",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "cli:build": "pnpm --filter @open-canvas/core --filter @open-canvas/cli build",
+    "cli:link": "pnpm cli:build && pnpm --filter @open-canvas/core --filter @open-canvas/cli link --global",
+    "cli:unlink": "pnpm --filter @open-canvas/core --filter @open-canvas/cli unlink --global",
+    "release:dry": "pnpm cli:build && pnpm --filter @open-canvas/core --filter @open-canvas/cli pack",
+    "release": "pnpm cli:build && pnpm --filter @open-canvas/core --filter @open-canvas/cli publish --access public"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "rimraf": "^6.1.3",
     "turbo": "^2.3.0",
     "typescript": "^5.6.3"
   },
   "engines": {
     "node": ">=18.18"
-  },
-  "workspaces": [
-    "packages/*",
-    "apps/*"
-  ]
+  }
 }
