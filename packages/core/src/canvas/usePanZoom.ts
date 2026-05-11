@@ -3,41 +3,43 @@ import { type Viewport, lerpViewport, zoomAt } from './viewport'
 
 interface UsePanZoomOptions {
   initial?: Viewport
-  /** 是否需要按住空格键才允许拖拽平移（避免与点击 Section 内的可交互内容冲突）。 */
+  /** Whether holding Space is required before drag-panning (avoids conflicts with interactive content inside Sections). */
   spaceToPan?: boolean
 }
 
 /**
- * 实现无限画布的平移 + 缩放交互。
+ * Infinite canvas pan + zoom interaction hook.
  *
- * 设计要点：
- * - 滚轮：Cmd/Ctrl 或 ctrlKey（触控板捏合的浏览器表现）= 缩放；否则 = 平移。
- * - 鼠标中键 / 空格+左键 = 拖拽平移。
- * - 所有缩放以鼠标位置为锚，避免视觉跳动。
+ * Design:
+ * - Wheel: Cmd/Ctrl or ctrlKey (trackpad pinch browser behavior) = zoom; otherwise = pan.
+ * - Middle-click / Space+left-click = drag pan.
+ * - All zoom anchored at cursor position to prevent visual jumping.
  */
 export function usePanZoom(
   ref: React.RefObject<HTMLElement>,
   { initial = { x: 0, y: 0, zoom: 1 }, spaceToPan = true }: UsePanZoomOptions = {},
 ) {
   const [viewport, setViewport] = useState<Viewport>(initial)
+  const viewportRef = useRef<Viewport>(initial)
   const spaceDown = useRef(false)
   const dragging = useRef<{ startX: number; startY: number; vx: number; vy: number } | null>(null)
   const animRef = useRef<number | null>(null)
 
-  /** 平滑过渡到目标 viewport，duration 单位 ms。 */
+  // Sync viewport state → ref so event callbacks always read the latest value
+  viewportRef.current = viewport
+
+  /** Smoothly animate to target viewport; duration in ms. */
   const animateTo = useCallback((target: Viewport, duration = 480) => {
     if (animRef.current) cancelAnimationFrame(animRef.current)
+    const from = viewportRef.current
     const start = performance.now()
-    setViewport((from) => {
-      const tick = (now: number) => {
-        const t = Math.min(1, (now - start) / duration)
-        setViewport(lerpViewport(from, target, t))
-        if (t < 1) animRef.current = requestAnimationFrame(tick)
-        else animRef.current = null
-      }
-      animRef.current = requestAnimationFrame(tick)
-      return from
-    })
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration)
+      setViewport(lerpViewport(from, target, t))
+      if (t < 1) animRef.current = requestAnimationFrame(tick)
+      else animRef.current = null
+    }
+    animRef.current = requestAnimationFrame(tick)
   }, [])
 
   useEffect(() => {
@@ -46,6 +48,10 @@ export function usePanZoom(
 
     const onWheel = (e: WheelEvent) => {
       e.preventDefault()
+      if (animRef.current) {
+        cancelAnimationFrame(animRef.current)
+        animRef.current = null
+      }
       const rect = el.getBoundingClientRect()
       const sx = e.clientX - rect.left
       const sy = e.clientY - rect.top
@@ -68,12 +74,17 @@ export function usePanZoom(
       const allow = e.button === 1 || (e.button === 0 && (!spaceToPan || spaceDown.current))
       if (!allow) return
       e.preventDefault()
+      if (animRef.current) {
+        cancelAnimationFrame(animRef.current)
+        animRef.current = null
+      }
       el.setPointerCapture(e.pointerId)
+      const vp = viewportRef.current
       dragging.current = {
         startX: e.clientX,
         startY: e.clientY,
-        vx: viewport.x,
-        vy: viewport.y,
+        vx: vp.x,
+        vy: vp.y,
       }
     }
     const onPointerMove = (e: PointerEvent) => {
@@ -108,10 +119,15 @@ export function usePanZoom(
       el.removeEventListener('pointerdown', onPointerDown)
       window.removeEventListener('pointermove', onPointerMove)
       window.removeEventListener('pointerup', onPointerUp)
+    }
+  }, [ref, spaceToPan])
+
+  // Clean up animation on unmount
+  useEffect(() => {
+    return () => {
       if (animRef.current) cancelAnimationFrame(animRef.current)
     }
-    // viewport 在拖拽起点被读取一次；后续位移用 d.vx + delta，因此无需重订阅
-  }, [ref, spaceToPan, viewport.x, viewport.y])
+  }, [])
 
   return { viewport, setViewport, animateTo }
 }
