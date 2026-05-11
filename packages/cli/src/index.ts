@@ -61,8 +61,9 @@ async function runInit(opts: InitOpts) {
   }
 
   const templateRoot = await resolveTemplateRoot(opts.template)
-  await copyDir(templateRoot, absTarget)
+  await copyDir(templateRoot, absTarget, ['skills'])
   await renderPackageJson(absTarget, pkgName)
+  await scaffoldAgentDirs(templateRoot, absTarget)
 
   console.log()
   console.log(kleur.bold().green('  ✓  open-canvas workspace created'))
@@ -97,13 +98,14 @@ async function resolveTemplateRoot(name: string): Promise<string> {
   throw new Error(`Template "${name}" not found.`)
 }
 
-async function copyDir(src: string, dst: string) {
+async function copyDir(src: string, dst: string, skip: string[] = []) {
   const entries = await fs.readdir(src, { withFileTypes: true })
   for (const e of entries) {
     const s = path.join(src, e.name)
     // package.json.tmpl → package.json，由 renderPackageJson 接管
     let name = e.name
     if (name === 'package.json.tmpl') continue
+    if (skip.includes(name)) continue
     if (name === 'gitignore' || name === '_gitignore') name = '.gitignore'
     if (name === 'npmrc' || name === '_npmrc') name = '.npmrc'
     const d = path.join(dst, name)
@@ -114,6 +116,23 @@ async function copyDir(src: string, dst: string) {
       await fs.copyFile(s, d)
     }
   }
+}
+
+async function scaffoldAgentDirs(templateRoot: string, target: string) {
+  const skillsSrc = path.join(templateRoot, 'skills')
+  const agentsSkillsDst = path.join(target, '.agents', 'skills')
+
+  // cp skills/ → .agents/skills/
+  await fs.mkdir(agentsSkillsDst, { recursive: true })
+  await copyDir(skillsSrc, agentsSkillsDst)
+
+  // .claude/skills → ../.agents/skills
+  const claudeDir = path.join(target, '.claude')
+  await fs.mkdir(claudeDir, { recursive: true })
+  await fs.symlink('../.agents/skills', path.join(claudeDir, 'skills'))
+
+  // CLAUDE.md → AGENTS.md
+  await fs.symlink('AGENTS.md', path.join(target, 'CLAUDE.md'))
 }
 
 async function renderPackageJson(target: string, pkgName: string) {
