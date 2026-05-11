@@ -1,6 +1,6 @@
 ---
 name: apply-comments
-description: Resolve every Inspector comment left in the source as a `@canvas-comment` marker — interpret the comment, edit the JSX element below it, and delete the marker. Use this skill whenever `// @canvas-comment[id=...]: ...` lines appear in `boards/**/*.tsx`. Trigger phrases include apply the comments, work through my Inspector notes, fix the things I just marked, address those review comments.
+description: Resolve every Inspector comment left in the source as a `@canvas-comment` marker — interpret the comment, edit the JSX element below it, and delete the marker. Use this skill whenever `@canvas-comment` lines appear in `boards/**/*.tsx`. Trigger phrases include apply the comments, work through my Inspector notes, fix the things I just marked, address those review comments.
 ---
 
 # apply-comments
