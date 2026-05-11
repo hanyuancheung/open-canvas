@@ -98,10 +98,24 @@ jobs:
           cd "$WORK"
 
           echo "::group::npx init from local cli tarball"
-          npx --yes "$CLI_TGZ" init my-board
+          # npm 11+ refuses to exec a bare tarball path (treats it as a script and
+          # bails with EACCES). Using a file:// URL forces npx to treat it as a
+          # package spec, the same code path `npx @open-canvas/cli` would hit.
+          npx --yes "file://$CLI_TGZ" init my-board
           echo "::endgroup::"
 
           cd my-board
+
+          echo "::group::Verify symlink-materialization regressions"
+          # The template ships with directories that were symlinks in git but must
+          # arrive as real directories/files. npm pack silently drops symlinks, so
+          # guard against their reintroduction.
+          test -d .claude/skills || (echo '.claude/skills missing or not a directory' && exit 1)
+          test -d .agents/skills || (echo '.agents/skills missing or not a directory' && exit 1)
+          test "$(ls .claude/skills | wc -l | tr -d ' ')" = "5" || (echo 'expected 5 skills under .claude/skills' && exit 1)
+          test "$(ls .agents/skills | wc -l | tr -d ' ')" = "5" || (echo 'expected 5 skills under .agents/skills' && exit 1)
+          test -f CLAUDE.md && [ "$(head -c 12 CLAUDE.md)" = "# CLAUDE.md" ] || (echo 'CLAUDE.md missing or wrong content' && exit 1)
+          echo "::endgroup::"
 
           echo "::group::Workspace files emitted by scaffolder"
           ls -la
