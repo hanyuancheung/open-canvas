@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { fitAll, fitFrame } from '../canvas/viewport'
 import { usePanZoom } from '../canvas/usePanZoom'
 import type { BoardModule, Section } from '../types'
@@ -14,18 +14,17 @@ export function BoardViewer({ boardId, board }: BoardViewerProps) {
   const screenRef = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ width: 0, height: 0 })
 
-  // 初始相机：fit 全部 sections
-  const initial = useMemo(() => {
-    if (size.width === 0) return { x: 0, y: 0, zoom: 1 }
-    return fitAll(
-      board.sections.map((s) => s.frame),
-      size,
-    )
-  }, [board, size])
+  const { viewport, setViewport, animateTo } = usePanZoom(screenRef, { spaceToPan: true })
 
-  const { viewport, animateTo } = usePanZoom(screenRef, { initial, spaceToPan: true })
+  // Once container size is available, fit all sections into viewport
+  const initialFitDone = useRef(false)
+  useEffect(() => {
+    if (size.width === 0 || initialFitDone.current) return
+    initialFitDone.current = true
+    setViewport(fitAll(board.sections.map((s) => s.frame), size))
+  }, [size, board, setViewport])
 
-  // 监听容器尺寸
+  // Observe container size
   useEffect(() => {
     const el = screenRef.current
     if (!el) return
@@ -37,7 +36,7 @@ export function BoardViewer({ boardId, board }: BoardViewerProps) {
     return () => ro.disconnect()
   }, [])
 
-  // 键盘：P 进入演示，0 fit-all，1 100%
+  // Keyboard: P = present, 0 = fit-all, 1 = 100%
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.target && (e.target as HTMLElement).closest('input, textarea, [contenteditable]'))
