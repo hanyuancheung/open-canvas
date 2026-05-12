@@ -1,6 +1,6 @@
 {
   "name": "@open-canvas/core",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Runtime, Vite plugin and CLI for open-canvas — an agent-native whiteboard framework.",
   "license": "MIT",
   "repository": {
