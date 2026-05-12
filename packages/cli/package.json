@@ -1,6 +1,6 @@
 {
   "name": "@open-canvas/cli",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Scaffolder for open-canvas — `npx @open-canvas/cli init my-board`.",
   "license": "MIT",
   "type": "module",
