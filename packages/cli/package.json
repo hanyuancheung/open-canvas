@@ -3,6 +3,15 @@
   "version": "0.3.0",
   "description": "Scaffolder for open-canvas — `npx @open-canvas/cli init my-board`.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hanyuancheung/open-canvas",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/hanyuancheung/open-canvas#readme",
+  "bugs": {
+    "url": "https://github.com/hanyuancheung/open-canvas/issues"
+  },
   "type": "module",
   "bin": {
     "open-canvas-init": "./bin.js",
