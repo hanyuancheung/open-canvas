@@ -16,7 +16,9 @@
     "cli:link": "pnpm cli:build && pnpm --filter @open-canvas/core --filter @open-canvas/cli link --global",
     "cli:unlink": "pnpm --filter @open-canvas/core --filter @open-canvas/cli unlink --global",
     "release:dry": "pnpm cli:build && pnpm --filter @open-canvas/core --filter @open-canvas/cli pack",
-    "release": "pnpm cli:build && pnpm --filter @open-canvas/core --filter @open-canvas/cli publish --access public"
+    "release:patch": "node scripts/release.mjs patch",
+    "release:minor": "node scripts/release.mjs minor",
+    "release:major": "node scripts/release.mjs major"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

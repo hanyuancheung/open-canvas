@@ -1,0 +1,79 @@
+name: Version Bump
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  bump:
+    name: Bump version & tag
+    if: >-
+      github.event.pull_request.merged == true &&
+      (contains(github.event.pull_request.labels.*.name, 'release:patch') ||
+       contains(github.event.pull_request.labels.*.name, 'release:minor') ||
+       contains(github.event.pull_request.labels.*.name, 'release:major'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Determine bump type
+        id: bump
+        run: |
+          if echo '${{ toJSON(github.event.pull_request.labels.*.name) }}' | grep -q 'release:major'; then
+            echo "type=major" >> "$GITHUB_OUTPUT"
+          elif echo '${{ toJSON(github.event.pull_request.labels.*.name) }}' | grep -q 'release:minor'; then
+            echo "type=minor" >> "$GITHUB_OUTPUT"
+          else
+            echo "type=patch" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.RELEASE_TOKEN }}
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: pnpm
+
+      - run: pnpm install --lockfile-only
+
+      - name: Bump versions
+        run: |
+          BUMP="${{ steps.bump.outputs.type }}"
+          CURRENT=$(node -p "require('./packages/core/package.json').version")
+
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
+          case "$BUMP" in
+            major) NEW="$((MAJOR+1)).0.0" ;;
+            minor) NEW="${MAJOR}.$((MINOR+1)).0" ;;
+            patch) NEW="${MAJOR}.${MINOR}.$((PATCH+1))" ;;
+          esac
+
+          echo "VERSION=$NEW" >> "$GITHUB_ENV"
+
+          # Update both package.json files
+          node -e "
+            const fs = require('fs');
+            for (const p of ['packages/core/package.json', 'packages/cli/package.json']) {
+              const pkg = JSON.parse(fs.readFileSync(p, 'utf-8'));
+              pkg.version = '${NEW}';
+              fs.writeFileSync(p, JSON.stringify(pkg, null, 2) + '\n');
+            }
+          "
+
+      - name: Commit & tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add packages/core/package.json packages/cli/package.json pnpm-lock.yaml
+          git commit -m "release: v${VERSION}"
+          git tag "v${VERSION}"
+          git push --follow-tags
