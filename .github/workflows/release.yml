@@ -76,8 +76,9 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add packages/core/package.json packages/cli/package.json
           git commit -m "release: v${VERSION}"
-          git tag "v${VERSION}"
-          git push --follow-tags
+          git tag -a "v${VERSION}" -m "v${VERSION}"
+          git push origin main
+          git push origin "v${VERSION}"
 
       - run: pnpm cli:build
 

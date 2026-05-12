@@ -101,7 +101,7 @@ run('pnpm install --lockfile-only', { write: true })
 // --- Git commit + tag ---
 run('git add packages/core/package.json packages/cli/package.json pnpm-lock.yaml', { write: true })
 run(`git commit -m "release: v${newVersion}"`, { write: true })
-run(`git tag v${newVersion}`, { write: true })
+run(`git tag -a v${newVersion} -m "v${newVersion}"`, { write: true })
 
 // --- Push ---
 run('git push --follow-tags', { write: true })
