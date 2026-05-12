@@ -10,6 +10,10 @@
 
 <!-- Key trade-offs, alternatives considered, why this approach -->
 
+## Test Plan
+
+<!-- How to verify this works. Commands to run, manual steps, expected output -->
+
 ## Setup / Migration
 
 <!-- Any manual steps needed after merge. Remove this section if N/A -->
