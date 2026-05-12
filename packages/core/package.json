@@ -3,6 +3,15 @@
   "version": "0.3.0",
   "description": "Runtime, Vite plugin and CLI for open-canvas — an agent-native whiteboard framework.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hanyuancheung/open-canvas",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/hanyuancheung/open-canvas#readme",
+  "bugs": {
+    "url": "https://github.com/hanyuancheung/open-canvas/issues"
+  },
   "type": "module",
   "bin": {
     "open-canvas": "./bin.js"
