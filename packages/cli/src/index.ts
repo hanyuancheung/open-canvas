@@ -142,7 +142,17 @@ async function renderPackageJson(target: string, pkgName: string) {
     path.resolve(here, '../../template/package.json.tmpl'),
   ].find((p) => existsSync(p))
   if (!tmpl) return
+  // Read CLI's own version (same as core in lockstep releases)
+  const cliPkgPath = [
+    path.resolve(here, '../package.json'),
+    path.resolve(here, '../../package.json'),
+  ].find((p) => existsSync(p))
+  const coreVersion = cliPkgPath
+    ? JSON.parse(await fs.readFile(cliPkgPath, 'utf8')).version
+    : '0.0.0'
   const raw = await fs.readFile(tmpl, 'utf8')
-  const rendered = raw.replace(/__PKG_NAME__/g, pkgName)
+  const rendered = raw
+    .replace(/__PKG_NAME__/g, pkgName)
+    .replace(/__CORE_VERSION__/g, coreVersion)
   await fs.writeFile(path.join(target, 'package.json'), rendered, 'utf8')
 }
