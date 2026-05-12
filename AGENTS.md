@@ -1,6 +1,6 @@
 # Repository Guidelines for AI Agents
 
-本文档是 **open-canvas** 项目对所有 coding agent（Claude Code、Codex、Cursor、Copilot、…）的硬性规则。提交前请确保符合所有 ✅ 项。
+本文档是 **open-canvas** 项目对所有 coding agent（Claude Code、Codex、Cursor、Copilot、…）的硬性规则。通用协作规范见 [`CONTRIBUTING.md`](./CONTRIBUTING.md)，本文件补充 agent 专属约束。
 
 ## Hard Rules
 
